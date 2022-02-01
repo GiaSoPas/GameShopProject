@@ -1,0 +1,25 @@
+﻿@model GameShop.Models.Game
+
+@{
+    ViewBag.Title = @Model.Name;
+    Layout = "_Layout";
+}
+
+<h2>@Model.Name</h2>
+<div><img width="450" height="215" src="/imgs/@{@Model.Id}.jpg"/></div>
+<br/>
+<div>@Model.Description</div>
+<br/>
+@{
+    if (Model.Price == 0)
+    {
+        <h5><span class="badge rounded-pill bg-primary">Free To Play</span></h5>
+    }
+    else
+    {
+        <h5><span class="badge rounded-pill bg-primary">@Model.Price ₽</span></h5>
+    }
+}
+<br/>
+<a type="button" class="btn btn-primary">Add to cart</a>
+

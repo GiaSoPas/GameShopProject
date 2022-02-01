@@ -1,0 +1,41 @@
+﻿@using System.Security.Claims
+@model System.Collections.Generic.IList<GameShop.Models.Game>
+
+@{
+    ViewBag.Title = "Catalog";
+    Layout = "_Layout";
+}
+
+<h2>Catalog</h2>
+<br/>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+@{
+    foreach (var game in Model)
+    {
+
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <img src="/imgs/@{@game.Id}.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <a class="nav-link text-dark" asp-controller="Catalog" asp-action="Item" asp-route-id=@game.Id><h6>@game.Name</h6></a>
+                        @{
+                            if (game.Price == 0)
+                            {
+                                <h5><span class="badge rounded-pill bg-primary">Free To Play</span></h5>
+                            }
+                            else
+                            {
+                                <h5><span class="badge rounded-pill bg-primary">@game.Price ₽</span></h5>
+                            }
+                        }
+                        </div>
+                    <div class="card-body">
+                        <a asp-controller="Cart" asp-action="AddToCart" asp-route-gameId="@game.Id" asp-route-email="@User.Identity.Name" class="btn btn-primary">Add to cart</a>
+                    </div>
+                </div>
+            </div>
+
+    }
+}
+</div>

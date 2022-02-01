@@ -1,0 +1,15 @@
+﻿@model List<GameShop.Models.Game>
+
+@{
+    ViewBag.Title = "Корзина";
+    Layout = "_Layout";
+}
+
+<h2>Корзина, бим бим бам бам</h2>
+<p>@Model.Count</p>
+@{
+    foreach (var game in Model)
+    {
+        <p>@game.Name</p>
+    }
+}

@@ -1,0 +1,23 @@
+﻿@using System.Security.Claims
+@model System.Threading.Tasks.Task<GameShop.Models.User>
+
+@{
+    ViewBag.Title = "Личный кабинет";
+    Layout = "_Layout";
+}
+
+<br>
+<h2>Личный кабинет</h2>
+<br>
+
+<h5>@Model.Result.Name @Model.Result.Surname</h5>
+<h6>Ваш e-mail: @Model.Result.Email</h6>
+<p>Дата рождения: @Model.Result.DateOfBirthday.ToString("dd.MM.yyyy")</p>
+
+<br/>
+<h4>Ваши заказы:</h4>
+<div class="div-outline">
+    <div>
+        coming soon...
+    </div>
+</div>

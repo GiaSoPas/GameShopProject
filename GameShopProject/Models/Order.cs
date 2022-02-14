@@ -5,16 +5,15 @@ namespace GameShop.Models;
 
 public class Order
 {
-    [Key] 
+    [Key]
     public int Id { get; set; }
 
-    public int UserId { get; set; }
+    public int OrderId { get; set; }
+        
+    public string Username { get; set; }
 
-    public User User { get; set; }
-
-    public List<Game> Games { get; set; }
+    public int GameId { get; set; }
     
-    public DateTime OrderTime { get; set; }
-
-
+    public DateTime Date { get; set; }
+    
 }

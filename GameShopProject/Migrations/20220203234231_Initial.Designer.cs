@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameShopProject.Migrations
 {
     [DbContext(typeof(GameShopDbContext))]
-    [Migration("20220131174519_Initial")]
+    [Migration("20220203234231_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,18 +26,22 @@ namespace GameShopProject.Migrations
 
             modelBuilder.Entity("GameShop.Models.CartItem", b =>
                 {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("ItemId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CartId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("GameId")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
+                    b.HasKey("ItemId");
 
-                    b.Property<int>("UserId1")
-                        .HasColumnType("integer");
-
-                    b.HasKey("UserId");
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("GameId");
 
                     b.ToTable("CartItems");
                 });
@@ -50,9 +54,6 @@ namespace GameShopProject.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CartItemUserId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -61,17 +62,10 @@ namespace GameShopProject.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CartItemUserId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Games");
                 });
@@ -84,15 +78,20 @@ namespace GameShopProject.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("OrderTime")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("GameId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("UserId");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Orders");
                 });
@@ -131,45 +130,13 @@ namespace GameShopProject.Migrations
 
             modelBuilder.Entity("GameShop.Models.CartItem", b =>
                 {
-                    b.HasOne("GameShop.Models.User", "User")
+                    b.HasOne("GameShop.Models.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GameShop.Models.Game", b =>
-                {
-                    b.HasOne("GameShop.Models.CartItem", null)
-                        .WithMany("Games")
-                        .HasForeignKey("CartItemUserId");
-
-                    b.HasOne("GameShop.Models.Order", null)
-                        .WithMany("Games")
-                        .HasForeignKey("OrderId");
-                });
-
-            modelBuilder.Entity("GameShop.Models.Order", b =>
-                {
-                    b.HasOne("GameShop.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GameShop.Models.CartItem", b =>
-                {
-                    b.Navigation("Games");
-                });
-
-            modelBuilder.Entity("GameShop.Models.Order", b =>
-                {
-                    b.Navigation("Games");
+                    b.Navigation("Game");
                 });
 #pragma warning restore 612, 618
         }

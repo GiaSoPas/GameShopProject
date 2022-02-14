@@ -5,10 +5,14 @@ namespace GameShop.Models;
 public class CartItem
 {
     [Key]
-    public int UserId { get; set; }
+    public string ItemId { get; set; }
 
-    public User User { get; set; }
+    public string CartId { get; set; }
+    
+    public System.DateTime DateCreated { get; set; }
+    
+    public int GameId { get; set; }
 
-    public List<Game> Games { get; set; } = new List<Game>();
-
+    public virtual Game Game { get; set; }
+    
 }

@@ -1,12 +1,8 @@
-﻿using System.Security.Claims;
-using GameShop.Models;
+﻿using GameShop.Models;
 using GameShopProject.Data;
-using GameShopProject.ViewModels;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameShopProject.Services;
+namespace GameShopProject.Services.Implementations;
 
 public class AccountService
 {

@@ -1,4 +1,5 @@
 ﻿using GameShopProject.Services;
+using GameShopProject.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameShopProject.Controllers;

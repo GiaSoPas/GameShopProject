@@ -1,6 +1,7 @@
 ﻿using System.Net.NetworkInformation;
 using System.Security.Claims;
 using GameShopProject.Services;
+using GameShopProject.Services.Implementations;
 using GameShopProject.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

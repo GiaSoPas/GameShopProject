@@ -2,7 +2,7 @@
 using GameShopProject.Data;
 using GameShopProject.Exceptions;
 
-namespace GameShopProject.Services;
+namespace GameShopProject.Services.Implementations;
 
 public class GameService
 {

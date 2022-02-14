@@ -1,9 +1,10 @@
 ﻿using GameShopProject.Services;
+using GameShopProject.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameShopProject.Controllers;
 
-public class CartController: Controller
+public class CartController : Controller
 {
     private readonly CartService _cartService;
 
@@ -14,20 +15,27 @@ public class CartController: Controller
         _cartService = cartService;
         _accountService = accountService;
     }
-    
-    public async Task<IActionResult> Cart(string email)
+
+    public IActionResult Cart()
     {
-        var user = await _accountService.GetUserByEmail(email);
-        var games = _cartService.GetGamesInCart(user.Id);
-        return View(games);
+        return View(_cartService.GetCartItems());
     }
 
-    public async Task<IActionResult> AddToCart(int gameId, string email)
+    public IActionResult AddToCart(int id, string url)
     {
-        var user = await _accountService.GetUserByEmail(email);
-        _cartService.AddGameInCard(gameId, user.Id);
-
-        return RedirectToAction("Catalog", "Catalog");
+        _cartService.AddToCard(id);
+        return Redirect(url);
     }
-    
+
+    public IActionResult RemoveAllItemFromCart(string url)
+    {
+        _cartService.RemoveAllItem();
+        return Redirect(url);
+    }
+
+    public IActionResult RemoveItemFromCart(int id, string url)
+    {
+        _cartService.RemoveItem(id);
+        return Redirect(url);
+    }
 }

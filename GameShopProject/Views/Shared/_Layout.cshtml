@@ -31,7 +31,7 @@
                         
                         if (User.Identity.IsAuthenticated)
                         {
-                            <a asp-controller="Cart" asp-action="Cart" asp-route-email="@User.Identity.Name"><button type="button" class="btn btn-secondary">Корзина</button></a>
+                            <a asp-controller="Cart" asp-action="Cart"><button type="button" class="btn btn-secondary">Корзина</button></a>
                             <a asp-controller="Account" asp-action="Account"><button type="button" class="btn btn-primary">Профиль</button></a>
                             <a asp-controller="Account" asp-action="Logout"><button type="button" class="btn btn-outline-light me-2">Выйти</button></a>
                         }

@@ -1,15 +1,49 @@
-﻿@model List<GameShop.Models.Game>
+﻿@using GameShop.Models
+@using Microsoft.AspNetCore.Http.Extensions
+@model System.Collections.Generic.List<GameShop.Models.CartItem>
 
 @{
     ViewBag.Title = "Корзина";
     Layout = "_Layout";
 }
 
-<h2>Корзина, бим бим бам бам</h2>
-<p>@Model.Count</p>
+<h2>Корзина</h2>
+<br/>
+
 @{
-    foreach (var game in Model)
+    if (Model.Any())
     {
-        <p>@game.Name</p>
+        <a class="btn btn-outline-secondary" asp-controller="Cart" asp-action="RemoveAllItemFromCart" asp-route-url="@Context.Request.GetEncodedUrl()">Delete all</a>
+        <br/>
+        <br/>
+        decimal total = 0;
+        foreach (var game in Model)
+        {
+            total += game.Game.Price;
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/imgs/@{@game.Game.Id}.jpg" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <a class="nav-link text-dark" asp-controller="Catalog" asp-action="Item" asp-route-id=@game.GameId><h5>@game.Game.Name</h5></a>
+                            <h5><span class="badge rounded-pill bg-primary">@game.Game.Price ₽</span></h5>
+                            <a class="btn btn-outline-secondary" asp-controller="Cart" asp-action="RemoveItemFromCart" asp-route-id="@game.GameId" asp-route-url="@Context.Request.GetEncodedUrl()">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <br/>
+        <h4>Общая стоимость @total ₽</h4>
+        <br/>
+        <a type="button" class="btn btn-outline-success" asp-controller="Order" asp-action="MakeOrder">Order</a>
+        
     }
+    else
+    {
+        <h4>Ваша корзина пуста</h4>
+    }
+
 }

@@ -16,8 +16,13 @@ public class OrderService : IOrderService
         _context = context;
         _cartService = cartService;
     }
-    
 
+    public IList<Order> GetOrderByName(string email)
+    {
+        var game = _context.Orders.Where(n => n.Username == email).ToList();
+
+        return game;
+    }
     public void MakeOrder()
     {
         List<CartItem> cartItems = _cartService.GetCartItems();

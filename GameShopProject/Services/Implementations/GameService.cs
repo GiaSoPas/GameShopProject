@@ -1,10 +1,11 @@
 ﻿using GameShop.Models;
 using GameShopProject.Data;
 using GameShopProject.Exceptions;
+using GameShopProject.Services.Interfaces;
 
 namespace GameShopProject.Services.Implementations;
 
-public class GameService
+public class GameService: IGameService
 {
     private readonly GameShopDbContext _context;
 
@@ -12,7 +13,7 @@ public class GameService
     {
         _context = context;
     }
-
+    
     public Game GetGameById(int id)
     { 
         var game = _context.Games.FirstOrDefault(g => g.Id == id);

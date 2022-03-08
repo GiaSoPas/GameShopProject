@@ -1,11 +1,12 @@
 ﻿using GameShop.Models;
 using GameShopProject.Data;
 using GameShopProject.Exceptions;
+using GameShopProject.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameShopProject.Services.Implementations
 {
-    public class CartService
+    public class CartService: ICartService
     {
         private readonly GameShopDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;

@@ -1,12 +1,13 @@
 ﻿using GameShopProject.Services;
 using GameShopProject.Services.Implementations;
+using GameShopProject.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameShopProject.Controllers;
 
 public class CatalogController: Controller
 {
-    private readonly GameService _service;
+    private readonly IGameService _service;
     
     public CatalogController(GameService service)
     {

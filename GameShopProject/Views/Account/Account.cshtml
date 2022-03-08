@@ -1,5 +1,8 @@
 ﻿@using System.Security.Claims
-@model System.Threading.Tasks.Task<GameShop.Models.User>
+@using GameShop.Models
+@using Microsoft.AspNetCore.Mvc.Filters
+@using GameShopProject.Models
+@model GameShopProject.ViewModels.OrderGameUserModel
 
 @{
     ViewBag.Title = "Личный кабинет";
@@ -10,14 +13,33 @@
 <h2>Личный кабинет</h2>
 <br>
 
-<h5>@Model.Result.Name @Model.Result.Surname</h5>
-<h6>Ваш e-mail: @Model.Result.Email</h6>
-<p>Дата рождения: @Model.Result.DateOfBirthday.ToString("dd.MM.yyyy")</p>
+<h5>@Model.User.Result.Name @Model.User.Result.Surname</h5>
+<h5></h5>
+<h6>Ваш e-mail: @Model.User.Result.Email</h6>
+<p>Дата рождения: @Model.User.Result.DateOfBirthday?.ToString("dd.MM.yyyy")</p>
 
 <br/>
 <h4>Ваши заказы:</h4>
 <div class="div-outline">
     <div>
-        coming soon...
+        
+        @foreach (var item in Model.Orders)
+        {
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/imgs/@{@item.Id}.jpg" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">@Model.Games.Find(g => g.Id == item.GameId).Name</h5>
+                            <p class="card-text">@Model.Games.Find(g => g.Id == item.GameId).Description</p>
+                            <p class="card-text"><small class="text-muted">@item.Date</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        
     </div>
 </div>

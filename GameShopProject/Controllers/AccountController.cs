@@ -1,7 +1,9 @@
 ﻿using System.Net.NetworkInformation;
 using System.Security.Claims;
+using GameShop.Models;
 using GameShopProject.Services;
 using GameShopProject.Services.Implementations;
+using GameShopProject.Services.Interfaces;
 using GameShopProject.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,11 +13,15 @@ namespace GameShopProject.Controllers;
 
 public class AccountController: Controller
 {
-    private readonly AccountService _service;
+    private readonly IAccountService _accountService;
+    private readonly IOrderService _orderService;
+    private readonly IGameService _gameService;
 
-    public AccountController(AccountService service)
+    public AccountController(AccountService accountService, OrderService orderService, GameService gameService)
     {
-        _service = service;
+        _accountService = accountService;
+        _orderService = orderService;
+        _gameService = gameService;
     }
     
     [HttpGet]
@@ -29,23 +35,27 @@ public class AccountController: Controller
     {
         if (ModelState.IsValid)
         {
-            var user = await _service.GetUserByEmailPassword(model.Email, model.Password);
+            var user = await _accountService.GetUserByEmailPassword(model.Email, model.Password);
             if (user != null)
             {
-                await Authenticate(model.Email); // аутентификация
- 
+                await Authenticate(user); // аутентификация
+                if (user.RoleId == 1)
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
                 return RedirectToAction("Index", "Home");
             }
             ModelState.AddModelError("", "Некорректные логин и(или) пароль");
         }
         return View(model);
     }
-    private async Task Authenticate(string userName)
+    private async Task Authenticate(User user)
     {
         // создаем один claim
         var claims = new List<Claim>
         {
-            new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+            new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+            new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
         };
         // создаем объект ClaimsIdentity
         ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
@@ -65,13 +75,13 @@ public class AccountController: Controller
     {
         if (ModelState.IsValid)
         {
-            var user = await _service.GetUserByEmail(model.Email);
+            var user = await _accountService.GetUserByEmail(model.Email);
             if (user == null)
             {
                 // добавляем пользователя в бд
-                await _service.AddUser(model.Email,model.Password, model.Name, model.Surname, model.DateOfBirthday);
-                
-                await Authenticate(model.Email); // аутентификация
+                await _accountService.AddUser(model.Email,model.Password, model.Name, model.Surname, model.DateOfBirthday);
+                var regUser = await _accountService.GetUserByEmailPassword(model.Email, model.Password);
+                await Authenticate(regUser); // аутентификация
  
                 return RedirectToAction("Index", "Home");
             }
@@ -89,13 +99,18 @@ public class AccountController: Controller
 
     public IActionResult Account()
     {
-        var user = _service.GetUserByEmail(User.Identity.Name);
-
-        if (user==null)
+        OrderGameUserModel vm = new OrderGameUserModel();
+        vm.Orders = _orderService.GetOrderByName(User.Identity.Name).ToList();
+        vm.Games = _gameService.GetAllGames().ToList();
+        vm.User = _accountService.GetUserByEmail(User.Identity.Name);
+        //ViewData["Orders"] = _orderService.GetOrderByName(User.Identity.Name);
+        // ViewData["User"] = _accountService.GetUserByEmail(User.Identity.Name);
+        //var user = _accountService.GetUserByEmail(User.Identity.Name);
+        
+        if (vm.User==null)
         {
             return RedirectToAction("Index", "Home");
         }
-
-        return View(user);
+        return View(vm);
     }
 }

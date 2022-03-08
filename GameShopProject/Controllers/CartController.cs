@@ -1,12 +1,13 @@
 ﻿using GameShopProject.Services;
 using GameShopProject.Services.Implementations;
+using GameShopProject.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameShopProject.Controllers;
 
 public class CartController : Controller
 {
-    private readonly CartService _cartService;
+    private readonly ICartService _cartService;
 
     private readonly AccountService _accountService;
 

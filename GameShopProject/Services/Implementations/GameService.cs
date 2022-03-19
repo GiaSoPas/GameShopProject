@@ -32,4 +32,41 @@ public class GameService: IGameService
 
         return game;
     }
+
+    public void CreateGame(string name, string description, decimal price)
+    {
+        Game game = new Game()
+            {Id = _context.Games.OrderBy(x=>x.Id).LastOrDefault().Id + 1, Name = name, Description = description, Price = price};
+        _context.Games.Add(game);
+
+        _context.SaveChanges();
+    }
+
+    public void DeleteGame(int id)
+    {
+        Game game = _context.Games.FirstOrDefault(g => g.Id == id);
+
+        if (game != null)
+        {
+            _context.Games.Remove(game);
+        }
+        else
+        {
+            throw new NotFoundException($"Can't delete game with id = {id}");
+        }
+        
+        _context.SaveChanges();
+    }
+
+    public void UpdateGame(int id, string name, string description, decimal price)
+    {
+        Game game = _context.Games.FirstOrDefault(g => g.Id == id);
+
+        game.Description = description;
+        game.Name = name;
+        game.Price = price;
+
+        _context.SaveChanges();
+
+    }
 }
